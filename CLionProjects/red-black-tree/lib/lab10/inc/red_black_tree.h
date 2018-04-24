@@ -12,6 +12,20 @@ namespace lab10 {
             left = right = parent = nullptr;
         }
     };
+
+    class redblacktree{
+    private:
+        Node *root;
+    protected:
+        void rotateleft(Node *a, Node *b);
+        void rotateright(Node *a, Node *b);
+        void fixviolations(Node *a, Node *b);
+    public:
+        redblacktree();
+        void insert(const int &n);
+        void inorder();
+        void levelorder();
+    };
 }
 
 #endif
