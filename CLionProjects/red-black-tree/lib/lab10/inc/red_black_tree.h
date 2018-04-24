@@ -17,9 +17,9 @@ namespace lab10 {
     private:
         Node *root;
     protected:
-        void rotateleft(Node *a, Node *b);
-        void rotateright(Node *a, Node *b);
-        void fixviolations(Node *a, Node *b);
+        void rotateleft(Node *&, Node *&);
+        void rotateright(Node *&, Node *&);
+        void fixviolations(Node *&, Node *&);
     public:
         redblacktree();
         void insert(const int &n);
