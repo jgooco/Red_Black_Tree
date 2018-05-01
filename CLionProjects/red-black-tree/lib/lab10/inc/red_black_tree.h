@@ -26,7 +26,7 @@ namespace lab10 {
         void insert(Node *top, int value);
         void inorder();
         void levelorder();
-        void remove(Node x);
+        void remove(Node *x);
     };
 }
 //dhnkghnuisrhnuitbkldnklk
