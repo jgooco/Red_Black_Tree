@@ -47,6 +47,8 @@ namespace lab10{
             if( top ->left == nullptr ) top->left = new Node(value);
             else insert_recurse(top->left, value);
         }
+        else if (value == top->data)
+            top->size++;
 
     }
 

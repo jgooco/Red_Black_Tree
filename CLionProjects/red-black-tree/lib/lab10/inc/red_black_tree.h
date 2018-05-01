@@ -5,6 +5,7 @@ namespace lab10 {
     struct Node{
         int data;
         bool  color;
+        int  size = 0;
         Node *left, *right, *parent;
 
         Node(int data){
