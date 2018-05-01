@@ -27,9 +27,10 @@ namespace lab10{
 
     }
 
-    void redblacktree::fixviolations(Node *&a, Node *&b)
+    void redblacktree::fixviolations(Node *&a, Node *&b) // fixes any violation from insert
     {
-
+        Node *parent;
+        Node *grandparent = nullptr;
     }
 
     void redblacktree::insert(const int &n)//inserts a node into red black tree
