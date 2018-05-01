@@ -14,6 +14,7 @@ namespace lab10 {
     };
 
     class redblacktree{
+
     private:
         Node *root;
     protected:

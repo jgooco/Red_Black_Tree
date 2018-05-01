@@ -26,7 +26,8 @@ namespace lab10{
 
     void rotateright(Node *&a, Node *&b)//rotates nodes to the right when "uncle" node is black
     {
-        int v;
+        return;
+
     }
 
     void redblacktree::fixviolations(Node *&a, Node *&b) // fixes any violation from insert
