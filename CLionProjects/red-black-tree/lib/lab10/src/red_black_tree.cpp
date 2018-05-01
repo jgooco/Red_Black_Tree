@@ -4,7 +4,7 @@
 namespace lab10{
 //test
     // AUXILIARY FUNCTION
-    void inOrder_traversal(Node *top);// recurse function that will level order tranversal;
+    void inOrder_traversal(Node *top);// recurse function that will level order traversal;
 
     void insert_recurse(Node *top, int value);
 
@@ -59,7 +59,7 @@ namespace lab10{
         }
     }
 
-    void redblacktree::remove(Node x){
+    void redblacktree::remove(Node *top, int value){
 
     }
 
