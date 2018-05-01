@@ -58,6 +58,10 @@ namespace lab10{
         }
     }
 
+    void redblacktree::remove(Node x){
+
+    }
+
     // default constructor
     redblacktree::redblacktree()
     {
