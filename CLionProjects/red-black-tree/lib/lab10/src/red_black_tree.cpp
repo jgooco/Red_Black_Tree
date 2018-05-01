@@ -1,10 +1,10 @@
 #include "red_black_tree.h"
-#include <iostream>
+#include "iostream"
 
 namespace lab10{
 //test
     // AUXILIARY FUNCTION
-    void inOrder_traversal(Node *top);// recurse function that will level order traversal;
+    void inOrder_traversal(Node *top);// recurse function that will level order tranversal;
 
     void insert_recurse(Node *top, int value);
 
@@ -26,7 +26,11 @@ namespace lab10{
 
     void rotateright(Node *&a, Node *&b)//rotates nodes to the right when "uncle" node is black
     {
-        return;
+        a = b->left;
+        b->left = a->right;
+        a->right = b;
+        a->red = a->right->red;
+        a->right->red;
 
     }
 
@@ -61,7 +65,7 @@ namespace lab10{
         }
     }
 
-    void redblacktree::remove(Node *top, int value){
+    void redblacktree::remove(Node x){
 
     }
 

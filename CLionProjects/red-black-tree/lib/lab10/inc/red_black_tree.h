@@ -15,7 +15,6 @@ namespace lab10 {
     };
 
     class redblacktree{
-
     private:
         Node *root;
     protected:
@@ -27,7 +26,7 @@ namespace lab10 {
         void insert(Node *top, int value);
         void inorder();
         void levelorder();
-        void remove(Node *x);
+        void remove(Node x);
     };
 }
 //dhnkghnuisrhnuitbkldnklk
