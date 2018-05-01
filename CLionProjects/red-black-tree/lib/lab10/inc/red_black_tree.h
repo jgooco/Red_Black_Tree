@@ -22,7 +22,7 @@ namespace lab10 {
         void fixviolations(Node *&, Node *&);
     public:
         redblacktree();
-        void insert(const int &n);
+        void insert(Node *top, int value);
         void inorder();
         void levelorder();
     };

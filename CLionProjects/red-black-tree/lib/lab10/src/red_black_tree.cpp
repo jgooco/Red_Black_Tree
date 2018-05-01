@@ -6,6 +6,8 @@ namespace lab10{
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top){};// recurse function that will level order tranversal;
 
+    void insert_recurse(Node *top, int value);
+
     void rotateleft(Node *&a, Node *&b){//rotates nodes to the left when "uncle" node is black
         Node *b_right = b->right;
         b->right = b_right->left;
@@ -29,13 +31,31 @@ namespace lab10{
 
     void redblacktree::fixviolations(Node *&a, Node *&b) // fixes any violation from insert
     {
-        Node *parent;
-        Node *grandparent = nullptr;
+
     }
 
-    void redblacktree::insert(const int &n)//inserts a node into red black tree
+    void redblacktree::insert(Node *top, int value)//inserts a node into red black tree
     {
+        if( value > top->data )
+        {
+            if( top->right == nullptr ) top->right = new Node(value);
+            else insert_recurse( top->right, value);
+        }
+        else if( value < top->data )
+        {
+            if( top ->left == nullptr ) top->left = new Node(value);
+            else insert_recurse(top->left, value);
+        }
 
+    }
+
+    void insert_recurse(Node *top, int value){
+        if(top == nullptr){
+            top = new Node(value);
+        }
+        else{
+            insert_recurse(top, value);
+        }
     }
 
     // default constructor
