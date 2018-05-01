@@ -28,5 +28,6 @@ namespace lab10 {
         void remove(Node x);
     };
 }
+//dhnkghnuisrhnuitbkldnklk
 
 #endif

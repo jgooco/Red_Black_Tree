@@ -2,7 +2,7 @@
 #include "iostream"
 
 namespace lab10{
-
+//test
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top){};// recurse function that will level order tranversal;
 
@@ -26,7 +26,7 @@ namespace lab10{
 
     void rotateright(Node *&a, Node *&b)//rotates nodes to the right when "uncle" node is black
     {
-
+        int v;
     }
 
     void redblacktree::fixviolations(Node *&a, Node *&b) // fixes any violation from insert
