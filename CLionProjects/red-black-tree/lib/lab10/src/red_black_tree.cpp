@@ -58,7 +58,28 @@ namespace lab10{
         }
     }
 
-    void redblacktree::remove(Node x){
+    void redblacktree::remove(Node* target){
+        if(target->right!=NULL&&target->left==NULL){//has only right child
+            Node* tmp=target->right;
+            target->data=tmp->data;
+            target->left=tmp->left;
+            target->right=tmp->right;
+            target=tmp;
+        }else if(target->right==NULL&&target->left!=NULL){//has only right child
+            Node* tmp=target->left;
+            target->data=tmp->data;
+            target->left=tmp->left;
+            target->right=tmp->right;
+            target=tmp;
+        }else if(target->right!=NULL&&target->left!=NULL){//two children
+            Node* tmp=target->right;
+            while(tmp->left!=NULL){
+                tmp=tmp->left;
+            }
+            target->data=tmp->data;
+            target=tmp;
+        }
+        //target is leaf node or a node with one child
 
     }
 
