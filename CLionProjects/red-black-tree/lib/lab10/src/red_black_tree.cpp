@@ -1,7 +1,7 @@
 #include "red_black_tree.h"
 
 namespace lab10{
-    void redblacktree::rotateleft(Node *&a, Node *&b){
+    void rotateleft(Node *&a, Node *&b){
         Node *b_right = b->right;
         b->right = b_right->left;
         if(b_right != nullptr)
@@ -15,8 +15,5 @@ namespace lab10{
             b->parent->right = b_right;
         b_right->left = b;
         b->parent= b_right;
-    }
-    void redblacktree::rotateright(Node *&a, Node *&b) {
-
     }
 }
