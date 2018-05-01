@@ -5,6 +5,7 @@ namespace lab10 {
     struct Node{
         int data;
         bool  color;
+        int  size = 0;
         Node *left, *right, *parent;
 
         Node(int data){
@@ -14,7 +15,6 @@ namespace lab10 {
     };
 
     class redblacktree{
-    private:
         Node *root;
     protected:
         void rotateleft(Node *&, Node *&);
@@ -22,7 +22,8 @@ namespace lab10 {
         void fixviolations(Node *&, Node *&);
     public:
         redblacktree();
-        void insert(Node *top, int value);
+
+        void insert(int value);
         void inorder();
         void levelorder();
         void remove(Node* target);
