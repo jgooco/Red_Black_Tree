@@ -4,7 +4,7 @@
 namespace lab10{
 
     // AUXILIARY FUNCTION
-    void inOrder_traversal(Node *top)// recurse function that will level order tranversal;
+    void inOrder_traversal(Node *top){};// recurse function that will level order tranversal;
 
     void rotateleft(Node *&a, Node *&b){//rotates nodes to the left when "uncle" node is black
         Node *b_right = b->right;
@@ -32,7 +32,7 @@ namespace lab10{
 
     }
 
-    void redblacktree::insert(const int &n)
+    void redblacktree::insert(const int &n)//inserts a node into red black tree
     {
 
     }
