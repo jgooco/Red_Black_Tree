@@ -4,9 +4,9 @@
 namespace lab10{
 
     // AUXILIARY FUNCTION
-    void inOrder_traversal(Node *top);
+    void inOrder_traversal(Node *top)// recurse function that will level order tranversal;
 
-    void rotateleft(Node *&a, Node *&b){
+    void rotateleft(Node *&a, Node *&b){//rotates nodes to the left when "uncle" node is black
         Node *b_right = b->right;
         b->right = b_right->left;
         if(b_right != nullptr)
@@ -22,7 +22,7 @@ namespace lab10{
         b->parent= b_right;
     }
 
-    void rotateright(Node *&a, Node *&b)
+    void rotateright(Node *&a, Node *&b)//rotates nodes to the right when "uncle" node is black
     {
 
     }
