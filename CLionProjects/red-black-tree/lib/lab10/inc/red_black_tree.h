@@ -17,11 +17,12 @@ namespace lab10 {
 
     class redblacktree{
         Node *root;
-    protected:
+
+    public:
         void rotateleft(Node *&, Node *&);
         void rotateright(Node *&, Node *&);
         void fixviolations(Node *&, Node *&);
-    public:
+
         redblacktree();
         bool color_is(Node* src);
         void insert(int value);

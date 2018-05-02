@@ -10,7 +10,7 @@ namespace lab10{
     void insert_recurse(Node *top, int value);
 
 
-    void rotateleft(Node *&a, Node *&b){
+    void redblacktree::rotateleft(Node *&a, Node *&b){
 
         /*       //rotates nodes to the left when "uncle" node is black
         Node *b_right = b->right;
@@ -28,31 +28,31 @@ namespace lab10{
         b->parent= b_right;
      */
 
-         if(a->right == nullptr){
-             //do nothing because you cant rotate with nothing.
-         }
-         else{
-             b = a->right;      //there is something to the left to rotate with
+        if(a->right == nullptr){
+            //do nothing because you cant rotate with nothing.
+        }
+        else{
+            b = a->right;      //there is something to the left to rotate with
 
-             if(b->left != nullptr){    //a node exists left of b
-                 a->right = b->left;    //so we make that node to be the right of a
-                 b->left->parent = a;   //and that b->left node's new parent is now a
-             }
-             else if (b->left == nullptr){      //if there is no node left of b
-                 a->right = nullptr;            //then right of a will be empty
-             }
-             if(a->parent != nullptr){      //if a parent of a exists
-                 b->parent = a->parent;     //b will be the new child to that parent
-             }
-             if(a->parent == nullptr){      //is a does not have a parent, then that means a is the root
+            if(b->left != nullptr){    //a node exists left of b
+                a->right = b->left;    //so we make that node to be the right of a
+                b->left->parent = a;   //and that b->left node's new parent is now a
+            }
+            else if (b->left == nullptr){      //if there is no node left of b
+                a->right = nullptr;            //then right of a will be empty
+            }
+            if(a->parent != nullptr){      //if a parent of a exists
+                b->parent = a->parent;     //b will be the new child to that parent
+            }
+            if(a->parent == nullptr){      //is a does not have a parent, then that means a is the root
                 b = root;                   //therefore after rotating left, b will be the new root
-             }
-             a->parent = b;         //after rotating, set a's new parent to be b
-             b->left = a;           //and b's left is now a
-         }
+            }
+            a->parent = b;         //after rotating, set a's new parent to be b
+            b->left = a;           //and b's left is now a
+        }
     }
 
-    void rotateright(Node *&a, Node *&b)
+    void redblacktree::rotateright(Node *&a, Node *&b)
     {
         if(a->left == nullptr){
             //do nothing. Nothing to rotate with.
