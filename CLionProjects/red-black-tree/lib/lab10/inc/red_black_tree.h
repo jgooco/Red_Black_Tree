@@ -23,10 +23,8 @@ namespace lab10 {
         void fixviolations(Node *&, Node *&);
     public:
         redblacktree();
-
+        bool color_is(Node* src);
         void insert(int value);
-        void inorder();
-        void levelorder();
         void remove(Node* target);
     };
 }

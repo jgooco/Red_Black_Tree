@@ -8,13 +8,6 @@ namespace lab10{
 
     void insert_recurse(Node *top, int value);
 
-    bool color_is(Node* src){
-        if(src!=NULL){
-            return src->color;
-        }else{
-            return BLACK;  //NULL as black
-        }
-    }
 
     void rotateleft(Node *&a, Node *&b){//rotates nodes to the left when "uncle" node is black
         Node *b_right = b->right;
@@ -89,8 +82,8 @@ namespace lab10{
             target=tmp;
         }
         //target is leaf node or a node with one child
-        if(target->color==RED){
-
+        if(color_is(target)){//if target is red
+            if(target)
         }
 
     }
@@ -99,6 +92,15 @@ namespace lab10{
     redblacktree::redblacktree()
     {
         root = nullptr;
+    }
+
+    bool redblacktree::color_is(Node *src) {
+        if(src!=NULL){
+            return src->color;
+        }else{
+            return BLACK;  //NULL as black
+        }
+
     }
 
     // prints tree elements by traversing inorder(?)
