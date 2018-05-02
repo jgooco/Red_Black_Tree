@@ -26,6 +26,8 @@ namespace lab10 {
         bool color_is(Node* src);
         void insert(int value);
         void remove(Node* target);
+
+        int size();
     };
 }
 

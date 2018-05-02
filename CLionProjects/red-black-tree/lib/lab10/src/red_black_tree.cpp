@@ -36,6 +36,10 @@ namespace lab10{
 
     }
 
+    int redblacktree::size() {
+        return root->size;
+    }
+
     void redblacktree::insert(int value)//inserts a node into red black tree
     {
         if (root == nullptr) {
@@ -99,11 +103,7 @@ namespace lab10{
 
     }
 
-    // prints tree elements by traversing inorder(?)
-    void redblacktree::inorder()
-    {
-        inOrder_traversal(root); // calls aux function
-    }
+
 
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top)
@@ -116,5 +116,6 @@ namespace lab10{
         std::cout << top->data << std::endl;
         inOrder_traversal(top->right);
     }
+
 
 }
