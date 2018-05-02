@@ -45,6 +45,7 @@ namespace lab10{
                 b->parent = a->parent;      //b's parent is now a's parent
             }
             if(a->parent == nullptr){       //if a had no parent then that meant a was root
+                //why is root not working?
                 b = root;               // after rotating right, b is now the new root
             }
             a->parent = b;              //a's new parent is now b since a rotated right
