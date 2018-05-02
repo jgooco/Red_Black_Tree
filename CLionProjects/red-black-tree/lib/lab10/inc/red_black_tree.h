@@ -1,6 +1,7 @@
 #ifndef CMPE126S18_LABS_LIB_LAB10_NODE_H
 #define CMPE126S18_LABS_LIB_LAB10_NODE_H
-
+#define RED true;
+#define BLACK false;
 namespace lab10 {
     struct Node{
         int data;
