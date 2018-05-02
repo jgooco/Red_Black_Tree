@@ -28,6 +28,28 @@ namespace lab10{
 
     void rotateright(Node *&a, Node *&b)//rotates nodes to the right when "uncle" node is black
     {
+        if(a->left == nullptr){
+            //do nothing. Nothing to rotate with.
+        }
+        else{   //if there is a left node to rotate with
+            b = a->left;        //set *b to be the node left of a. (we are rotating a to the right.
+
+            if(b->right != nullptr){     //need to move the b->right to the left of a
+                a->left = b->right;     //moved to left of a
+                b->right->parent = a;       //b->right's new parent is now a
+            }
+            else if (b->right == nullptr){      //nothing to move
+                a->left = nullptr;          //dont think I need... (maybe just do nothing)
+            }
+            if(a->parent != nullptr){       //if the parent of a exists, we need to change it to be b's parent instead
+                b->parent = a->parent;      //b's parent is now a's parent
+            }
+            if(a->parent == nullptr){       //if a had no parent then that meant a was root
+                b = root;               // after rotating right, b is now the new root
+            }
+            a->parent = b;              //a's new parent is now b since a rotated right
+            b->right = a;               //b's right is now a
+        }
 
     }
 
