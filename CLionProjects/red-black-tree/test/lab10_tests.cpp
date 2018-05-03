@@ -1,10 +1,6 @@
 #include "gtest/gtest.h"
 #include "red_black_tree.h"
 #include <iostream>
-//#include "../lib/lab08/inc/hash_table.h"
-//#include "../lib/lab08/src/sorts.cpp"
-//#include "../lib/lab06/inc/doubly_linked_list.h"
-
 class Lab08SortsFixture : public ::testing::Test {
 protected:
     virtual void SetUp() {
