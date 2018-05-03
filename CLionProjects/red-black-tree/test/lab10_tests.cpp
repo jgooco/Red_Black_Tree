@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "red_black_tree.h"
 #include <iostream>
+
+/*
 class Lab08SortsFixture : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -12,7 +14,7 @@ public:
     //std::vector <unsigned> test_numbers;
 };
 
-/*
+
 class Lab08SortsProfiler : public ::testing::Test {
 protected:
     virtual void SetUp(){
@@ -40,7 +42,8 @@ TEST(red_black_tree, insertTest)
     tree1.insert(1);
 
     EXPECT_EQ(5, tree1.size());
-    //EXPECT_EQ("1 10 15 20 30", tree1.print());
+    EXPECT_EQ("1 10 15 20 30", tree1.inOrder()); // indicates nodes are in the right place
+    //EXPECT_EQ("20 10 30 1 15", tree1.levelOrder()); // indicates rbt
 }
 
 TEST(red_black_tree, removeTest)
@@ -53,4 +56,6 @@ TEST(red_black_tree, removeTest)
     tree2.insert(1);
 
     EXPECT_EQ(5, tree2.size());
+    //EXPECT_EQ("1 10 15 20 30", tree2.inOrder()); // indicates nodes are in the right place
+    //EXPECT_EQ("20 10 30 1 15", tree2.levelOrder()); // indicates rbt
 }
