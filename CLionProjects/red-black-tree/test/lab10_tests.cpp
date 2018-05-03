@@ -1,10 +1,6 @@
 #include "gtest/gtest.h"
 #include "red_black_tree.h"
 #include <iostream>
-//#include "../lib/lab08/inc/hash_table.h"
-//#include "../lib/lab08/src/sorts.cpp"
-//#include "../lib/lab06/inc/doubly_linked_list.h"
-
 class Lab08SortsFixture : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -44,4 +40,17 @@ TEST(red_black_tree, insertTest)
     tree1.insert(1);
 
     EXPECT_EQ(5, tree1.size());
+    //EXPECT_EQ("1 10 15 20 30", tree1.print());
+}
+
+TEST(red_black_tree, removeTest)
+{
+    lab10::redblacktree tree2;
+    tree2.insert(10);
+    tree2.insert(20);
+    tree2.insert(30);
+    tree2.insert(15);
+    tree2.insert(1);
+
+    EXPECT_EQ(5, tree2.size());
 }

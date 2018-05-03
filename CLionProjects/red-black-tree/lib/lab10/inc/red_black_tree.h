@@ -2,10 +2,7 @@
 #define CMPE126S18_LABS_LIB_LAB10_NODE_H
 #define RED true;
 #define BLACK false;
-
 namespace lab10 {
-
-
     struct Node{
         int data;
         bool  color;
@@ -20,10 +17,9 @@ namespace lab10 {
 
     class redblacktree{
         Node *root;
-
-        void rotateleft(Node *&a, Node *&b);
-
-        void rotateright(Node *&a, Node *&b);
+    protected:
+        void rotateleft(Node *&, Node *&);
+        void rotateright(Node *&, Node *&);
         void fixviolations(Node *&, Node *&);
 
     public:
@@ -33,8 +29,6 @@ namespace lab10 {
         void remove(Node* target);
 
         int size();
-
-        void fixviolations(Node *root, Node *ptr);
     };
 }
 

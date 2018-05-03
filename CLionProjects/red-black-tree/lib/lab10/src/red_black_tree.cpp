@@ -4,7 +4,6 @@
 
 namespace lab10{
 
-
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top);// recurse function that will level order tranversal;
 
@@ -12,6 +11,23 @@ namespace lab10{
 
 
     void redblacktree::rotateleft(Node *&a, Node *&b){
+
+        /*       //rotates nodes to the left when "uncle" node is black
+        Node *b_right = b->right;
+        b->right = b_right->left;
+        if(b_right != nullptr)
+            b->right->parent = b;
+        b_right->parent = b->parent;
+        if(b->parent == nullptr)
+            a = b_right;
+        else if(b == b->parent->left)
+            b->parent->left = b_right;
+        else
+            b->parent->right = b_right;
+        b_right->left = b;
+        b->parent= b_right;
+     */
+
         if(a->right == nullptr){
             //do nothing because you cant rotate with nothing.
         }
@@ -76,8 +92,9 @@ namespace lab10{
 
     }
 
-    void redblacktree::fixviolations(Node *root, Node *ptr) // fixes any violation from insert
+    void redblacktree::fixviolations(Node *&a, Node *&b) // fixes any violation from insert
     {
+
     }
 
     int redblacktree::size() {
@@ -238,26 +255,6 @@ namespace lab10{
 
     }
 
-    void redblacktree::fixviolations(Node *&root, Node *&ptr) {
-
-        Node *parent = nullptr;
-        Node *gparent = nullptr;
-
-        while ((ptr != root) && (ptr->color != BLACK) && (ptr->parent->color == RED)){
-            parent = ptr->parent;
-            gparent = ptr->parent->parent;
-
-            if (parent == gparent->left) { // If parent of left child of grandparent of ptr
-                Node *uncle = gparent->right;
-
-                if (uncle != nullptr && uncle->color == RED ){
-
-                }
-
-
-            }
-        }
-    }
 
 
     // AUXILIARY FUNCTION
