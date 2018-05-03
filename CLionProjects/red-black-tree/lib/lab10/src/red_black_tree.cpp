@@ -363,7 +363,7 @@ namespace lab10{
                             target->parent->right->parent=target->parent;
                             target->parent->parent->left=target->parent;
                             target->parent->color=RED;
-                            target->parent->parent=BLACK
+                            target->parent->parent->color=BLACK
                         }
                         if(!target->parent->right->color){//sibling is black
                             if(color_is(target->parent->right->right)){//rr case:do rotation
