@@ -28,6 +28,8 @@ namespace lab10 {
         void insert(int value);
         void remove(Node* target);
 
+        void inOrder();
+        void levelOrder();
         int size();
     };
 }

@@ -255,7 +255,15 @@ namespace lab10{
 
     }
 
+    void redblacktree::inOrder()
+    {
+        inOrder_traversal(root);
+    }
 
+    void redblacktree::levelOrder()
+    {
+
+    }
 
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top)
