@@ -18,8 +18,8 @@ namespace lab10 {
     class redblacktree{
         Node *root;
     protected:
-        void rotateleft(Node *&, Node *&);
-        void rotateright(Node *&, Node *&);
+        void rotateleft(Node *&);
+        void rotateright(Node *&);
         void fixviolations(Node *&, Node *&);
 
     public:
