@@ -100,7 +100,7 @@ namespace lab10{
     }
 
     int redblacktree::size() {
-        return root->size;
+        return _size;
     }
 
     void redblacktree::insert(int value)//inserts a node into red black tree
@@ -161,6 +161,7 @@ namespace lab10{
             }
         }
         root->color = BLACK;            //ROOT MUST ALWAYS BE BLACK
+        _size++;//size counting
     }
 
     void insert_recurse(Node *top, int value) {
@@ -397,12 +398,14 @@ namespace lab10{
             }
         }
         delete target;
+        _size--;
     }
 
     // default constructor
     redblacktree::redblacktree()
     {
         root = nullptr;
+        _size = 0;
     }
 
     bool redblacktree::color_is(Node *src) {

@@ -6,8 +6,8 @@ namespace lab10 {
     struct Node{
         int data;
         bool  color;
-        int  size = 0;
         Node *left, *right, *parent;
+        int  size=0;
 
         Node(int data){
             this->data =data;
@@ -17,6 +17,7 @@ namespace lab10 {
 
     class redblacktree{
         Node *root;
+        int  _size;
     protected:
         void rotateleft(Node *&);
         void rotateright(Node *&);
