@@ -110,29 +110,84 @@ namespace lab10{
     }
 
     void redblacktree::remove(Node* target){
-        if(target->right!=NULL&&target->left==NULL){//has only right child
-            Node* tmp=target->right;
-            target->data=tmp->data;
-            target->left=tmp->left;
-            target->right=tmp->right;
-            target=tmp;
-        }else if(target->right==NULL&&target->left!=NULL){//has only right child
-            Node* tmp=target->left;
-            target->data=tmp->data;
-            target->left=tmp->left;
-            target->right=tmp->right;
-            target=tmp;
-        }else if(target->right!=NULL&&target->left!=NULL){//two children
+        if(target->right!=NULL&&target->left!=NULL){//two children
             Node* tmp=target->right;
             while(tmp->left!=NULL){
                 tmp=tmp->left;
-            }
+            }//tmp is the successor
             target->data=tmp->data;
             target=tmp;
         }
         //target is leaf node or a node with one child
-        if(color_is(target)){//if target is red
-            if(target)
+
+
+        if(color_is(target)){//if target is red,and only have one or no child
+            target->color=BLACK;
+            if(target->right!=NULL){
+                Node* tmp=target->right;
+                target->data=tmp->data;
+                target->left=tmp->left;
+                target->right=tmp->right;
+                target=tmp;
+            }else if(target->left!=NULL){
+                Node* tmp=target->left;
+                target->data=tmp->data;
+                target->left=tmp->left;
+                target->right=tmp->right;
+                target=tmp;
+            }else if(target->parent!=NULL){//no child but have parent
+                if(target->parent->left==target){
+                    target->parent->left=NULL;
+                }else if(target->parent->right==target){
+                    target->parent->right=NULL;
+                }else{
+                    throw "Structure error: cant find child in parent pointer";
+                }
+            }
+        }else{//target is black
+            if(color_is(target->left)||color_is(target->right)){// target have a red child
+                if(target->right!=NULL){
+                    Node* tmp=target->right;
+                    target->data=tmp->data;
+                    target->left=tmp->left;
+                    target->right=tmp->right;
+                    target=tmp;
+                }else if(target->left!=NULL){
+                    Node* tmp=target->left;
+                    target->data=tmp->data;
+                    target->left=tmp->left;
+                    target->right=tmp->right;
+                    target=tmp;
+                }
+            }else{//target have a black child or have no child: double black
+                if(target->parent!=NULL){//target is not root
+                    if(target==target->parent->right){//sibling at left
+                        if(target->left==NULL)
+                            throw "Structure error: double black node don't have sibling";
+                        if(!target->left->color) {//sibling is black
+                        }
+                    }else if(target==target->parent->left){//sibling at right
+                        if(target->parent->right==NULL)
+                            throw "Structure error: double black node don't have sibling";
+                        if(!target->parent->right->color){//sibling is black
+                            if(color_is(target->parent->right->right)){//rr case:do rotation
+                                target->data=target->parent->data;
+                                target->parent->data=target->parent->right->data;
+                                if(target->right!=NULL)
+                                    target->left = target->right;
+                                target->right=target->parent->right->left;
+                                target->right->parent=target;
+                                target=target->parent->right;//delete target at the very end
+                                target->parent->right=target->parent->right->right;
+                                target->parent->right->parent=target->parent;
+                            }else if(color_is(target->parent->right->left)){//rl case
+
+                            }
+                        }
+                    }else
+                        throw "Structure error: cant find child in parent pointer";
+                }
+            }
         }
 
     }
