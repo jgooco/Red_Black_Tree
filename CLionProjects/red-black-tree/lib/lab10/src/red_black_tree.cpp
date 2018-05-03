@@ -383,8 +383,17 @@ namespace lab10{
 
     }
 
+    // used to print data in tree inOrder (least to greatest)
+    void redblacktree::inOrder()
+    {
+        inOrder_traversal(root);
+    }
 
+    // used to indicate recoloring/rotating done in insert and remove
+    void redblacktree::levelOrder()
+    {
 
+    }
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top)
     {
