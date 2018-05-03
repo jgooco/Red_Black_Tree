@@ -22,7 +22,7 @@ namespace lab10 {
     protected:
         void rotateleft(Node *&);
         void rotateright(Node *&);
-        void fixviolations(Node *&, Node *&);
+        void fixInsert(Node *&);
 
     public:
         redblacktree();
