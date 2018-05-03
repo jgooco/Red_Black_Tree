@@ -57,5 +57,10 @@ TEST(red_black_tree, removeTest)
 
     EXPECT_EQ(5, tree2.size());
     //EXPECT_EQ("1 10 15 20 30", tree2.inOrder()); // indicates nodes are in the right place
-    //EXPECT_EQ("20 10 30 1 15", tree2.levelOrder()); // indicates rbt
+
+    tree2.remove(10);
+    tree2.remove(30);
+    EXPECT_EQ(3, tree2.size());
+
+    //EXPECT_EQ("10 1 20 15", tree2.levelOrder()); // indicates rbt
 }

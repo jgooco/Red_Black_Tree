@@ -6,7 +6,7 @@ namespace lab10{
 
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top);// recurse function that will level order traversal;
-
+    int height_of_tree(Node *top); // for level order traversal
     void insert_recurse(Node *top, int value);
 
 
@@ -471,6 +471,8 @@ namespace lab10{
     {
 
     }
+
+
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top)
     {
@@ -483,5 +485,30 @@ namespace lab10{
         inOrder_traversal(top->right);
     }
 
+    int height_of_tree(Node *top)
+    {
+        if (top == nullptr)
+        {
+            return 0;
+        }
+
+        else
+        {
+            int left_height = height_of_tree(top->left);
+            int right_height = height_of_tree(top->right);
+
+            if (left_height > right_height)
+            {
+                left_height = left_height+1;
+                return left_height;
+            }
+
+            if (left_height < right_height)
+            {
+                right_height = right_height+1;
+                return right_height;
+            }
+        }
+    }
 
 }
