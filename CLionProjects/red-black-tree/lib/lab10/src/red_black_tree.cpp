@@ -173,6 +173,74 @@ namespace lab10{
         } else if (value == top->data) top->size++;
     }
 
+    void _Bsibling_Bchildren(Node *double_black){//recursive auxiliary function
+        if(double_black->parent!=NULL){
+            if(!double_black->parent->color){//parent is black
+                _Bsibling_Bchildren(double_black->parent);
+            }else{//parent is red
+                double_black->parent->color=BLACK;
+            }
+            //make sibling red
+            if(double_black->parent->left==double_black){//sibling at right
+                double_black->parent->right->color=RED;
+            }else if(double_black->parent->right==double_black){//sibling at left
+                double_black->parent->left->color=RED;
+            }else
+                throw "Structure error: cant find child in parent pointer";
+        }
+    }
+    Node* LL_rotation(Node * target){//auxiliary function
+        target->data=target->parent->data;
+        target->parent->data=target->parent->left->data;
+        if(target->left!=NULL)
+            target->right = target->left;
+        target->left=target->parent->left->right;
+        if(target->left!=NULL)
+            target->left->parent=target;
+        target=target->parent->left;//delete target at the very end
+        target->parent->left=target->left;
+        target->left->parent=target->parent;
+        target->left->color=BLACK;
+        return target;
+    }
+    Node* LR_rotation(Node * target) {//auxiliary function
+        //first rotation: to a ll case
+        Node* LR=target->parent->left->right;
+        target->parent->left->right=LR->left;
+        LR->left=target->parent->left;
+        LR->left->parent=LR;
+        target->parent->left=LR;
+        LR->parent=target->parent;
+
+        //Second rotation
+        return LL_rotation(target);
+    }
+    Node* RR_rotation(Node * target) {//auxiliary function
+        target->data=target->parent->data;
+        target->parent->data=target->parent->right->data;
+        if(target->right!=NULL)
+            target->left = target->right;
+        target->right=target->parent->right->left;
+        if(target->right!=NULL)
+            target->right->parent=target;
+        target=target->parent->right;//delete target at the very end
+        target->parent->right=target->right;
+        target->right->parent=target->parent;
+        target->right->color=BLACK;
+        return target;
+    }
+    Node* RL_rotation(Node * target) {//auxiliary function
+        //first rotation: to a rr case
+        Node* RL=target->parent->right->left;
+        target->parent->right->left=RL->right;
+        RL->right=target->parent->right;
+        RL->right->parent=RL;
+        target->parent->right=RL;
+        RL->parent=target->parent;
+
+        //Second rotation
+        return RR_rotation(target);
+    }
     void redblacktree::remove(Node* target){
         if(target->right!=NULL&&target->left!=NULL){//two children
             Node* tmp=target->right;
@@ -183,7 +251,6 @@ namespace lab10{
             target=tmp;
         }
         //target is leaf node or a node with one child
-
 
         if(color_is(target)){//if target is red,and only have one or no child
             target->color=BLACK;
@@ -229,23 +296,43 @@ namespace lab10{
                         if(target->left==NULL)
                             throw "Structure error: double black node don't have sibling";
                         if(!target->left->color) {//sibling is black
+                            if(color_is(target->parent->left->left)){//ll case:do rotation
+                                target=LL_rotation(target);
+                            }else if(color_is(target->parent->left->right)){//lr case
+                                target=LR_rotation(target);
+                            }else{//black sibling at left and have both black children
+                                _Bsibling_Bchildren(target);
+                                if(target->right!=NULL) {
+                                    target->parent->right = target->right;
+                                    target->right->parent=target->parent;
+                                }
+                                else if(target->left!=NULL) {
+                                    target->parent->right = target->left;
+                                    target->left->parent=target->parent;
+                                } else
+                                    target->parent->right=NULL;
+                            }
                         }
                     }else if(target==target->parent->left){//sibling at right
                         if(target->parent->right==NULL)
                             throw "Structure error: double black node don't have sibling";
                         if(!target->parent->right->color){//sibling is black
                             if(color_is(target->parent->right->right)){//rr case:do rotation
-                                target->data=target->parent->data;
-                                target->parent->data=target->parent->right->data;
-                                if(target->right!=NULL)
-                                    target->left = target->right;
-                                target->right=target->parent->right->left;
-                                target->right->parent=target;
-                                target=target->parent->right;//delete target at the very end
-                                target->parent->right=target->parent->right->right;
-                                target->parent->right->parent=target->parent;
+                                target=RR_rotation(target);
                             }else if(color_is(target->parent->right->left)){//rl case
-
+                                target=RL_rotation(target);
+                            }
+                            else{//black sibling at right and have both black children
+                                _Bsibling_Bchildren(target);
+                                if(target->right!=NULL) {
+                                    target->parent->left = target->right;
+                                    target->right->parent=target->parent;
+                                }
+                                else if(target->left!=NULL) {
+                                    target->parent->left = target->left;
+                                    target->left->parent=target->parent;
+                                } else
+                                    target->parent->left=NULL;
                             }
                         }
                     }else
@@ -271,8 +358,17 @@ namespace lab10{
 
     }
 
+    // used to print data in tree inOrder (least to greatest)
+    void redblacktree::inOrder()
+    {
+        inOrder_traversal(root);
+    }
 
+    // used to indicate recoloring/rotating done in insert and remove
+    void redblacktree::levelOrder()
+    {
 
+    }
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top)
     {
