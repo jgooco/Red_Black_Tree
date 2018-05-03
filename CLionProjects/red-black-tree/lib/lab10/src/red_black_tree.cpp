@@ -1,16 +1,19 @@
 #include "red_black_tree.h"
 #include <iostream>
+#include <queue>
 
 
 namespace lab10{
 
     // AUXILIARY FUNCTION
-    void inOrder_traversal(Node *top);// recurse function that will level order traversal;
-    int height_of_tree(Node *top); // for level order traversal
+    void inOrder_traversal(Node *top);// recurse function that will level order tranversal;
+
+    void levelOrderRecurse(Node *top);
+
     void insert_recurse(Node *top, int value);
 
 
-    void redblacktree::rotateleft(Node *&a){
+    void redblacktree::rotateleft(Node *&a) {
 
         /*       //rotates nodes to the left when "uncle" node is black
         Node *b_right = b->right;
@@ -55,7 +58,7 @@ namespace lab10{
                 b = root;                   //therefore after rotating left, b will be the new root
             }
             a->parent = b;         //after rotating, set a's new parent to be b
-            a = b->left;           //and b's left is now a
+            b->left = a;           //and b's left is now a
         }
     }
 
@@ -89,65 +92,11 @@ namespace lab10{
                 b = root;               // after rotating right, b is now the new root
             }
             a->parent = b;              //a's new parent is now b since a rotated right
-            a = b->right;               //b's right is now a
+            b->right = a;               //b's right is now a
         }
 
     }
 
-    void redblacktree::fixInsert(Node *&newNode) // fixes any violation from insert
-    {
-        color_to_red(newNode);                  //always inserting new node as red
-        while(newNode != root && color_is(newNode->parent))     //only go through this if-statement if parent of temp is red
-        {
-            Node *grandparent = newNode->parent->parent;       //set grandparent node of temp
-            Node *uncle;                            //set uncle node to temp
-            if(grandparent->left == newNode->parent)   //if temp's parent is to the left of temp's grandparent
-            {
-                uncle = grandparent->right;         //uncle has to be to the right of the grandparent
-                if(color_is(uncle)){
-                    color_to_black(newNode->parent);           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
-                    uncle->color = newNode->parent->color;     //uncle is always the same color are temp's parent
-                    color_to_red(grandparent);       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
-                }
-                else{       //if uncle is black
-                    if(newNode == newNode->parent->right){
-                        rotateleft(newNode->parent);
-                    }
-                    color_to_black(newNode->parent);           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
-                    color_to_red(grandparent);       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
-                    rotateright(grandparent);
-                }
-            }
-            else if(grandparent->right == newNode->parent)     //if temp's parent was to the right of grandparent instead
-            {
-                uncle = grandparent->left;      //uncle has to be the other side of parent, meaning left of grandparent in this case
-                if(color_is(uncle)){
-                    color_to_black(newNode->parent);           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
-                    uncle->color = newNode->parent->color;     //uncle is always the same color are temp's parent
-                    color_to_red(grandparent);       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
-                }
-                else{       //if uncle is black
-                    if(newNode == newNode->parent->left){
-                        rotateright(newNode->parent);
-                    }
-                    color_to_black(newNode->parent);           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
-                    color_is(grandparent);       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
-                    rotateleft(grandparent);
-                }
-            }
-            else {          //if there is no grandparents
-                newNode->parent = root;
-            }
-        }
-        color_to_black(root);            //ROOT MUST ALWAYS BE BLACK
-    }
-
-    void redblacktree::color_to_black(Node *newNode){
-        newNode->color = BLACK;
-    }
-    void redblacktree::color_to_red(Node *newNode){
-        newNode->color = RED;
-    }
 
     int redblacktree::size() {
         return _size;
@@ -155,37 +104,59 @@ namespace lab10{
 
     void redblacktree::insert(int value)//inserts a node into red black tree
     {
-        Node *temp, *parent;       //temp is the node we are inserting with the value in it
-        Node *newNode = new Node(value);
-        newNode->left = nullptr;
-        newNode->right= nullptr;
+        Node *temp;       //temp is the node we are inserting with the value in it
+        temp->data = value;
+        temp->color = RED;                  //always inserting new node as red
+        insert_recurse(root, value);
 
-        if (root == nullptr)        //tree is empty so we make the root to be the temp value
+        if (root == nullptr)        //tree is empty
         {
-            root = newNode;
-        }
-        else          //if tree is not empty
+            root = temp;            //so the new node we are inserting will be the root
+        } else                        //if tree is not empty
         {
-            temp = root;
-            while(temp != nullptr){
-                parent = temp;
-                if(value < temp->data){
-                    temp = temp->left;
+            while (temp != root &&
+                   color_is(temp->parent))     //only go through this if-statement if parent of temp is red
+            {
+                Node *grandparent = temp->parent->parent;       //set grandparent node of temp
+                Node *uncle;                            //set uncle node to temp
+                if (grandparent->left == temp->parent)   //if temp's parent is to the left of temp's grandparent
+                {
+                    uncle = grandparent->right;         //uncle has to be to the right of the grandparent
+                    if (color_is(uncle)) {
+                        temp->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
+                        uncle->color = temp->parent->color;     //uncle is always the same color are temp's parent
+                        grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
+                    } else {       //if uncle is black
+                        if (temp->parent->right = temp) {
+                            rotateleft(temp->parent);
+                        }
+                        temp->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
+                        grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
+                        rotateright(grandparent);
+                    }
+                } else if (grandparent->right ==
+                           temp->parent)     //if temp's parent was to the right of grandparent instead
+                {
+                    uncle = grandparent->left;      //uncle has to be the other side of parent, meaning left of grandparent in this case
+                    if (color_is(uncle)) {
+                        temp->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
+                        uncle->color = temp->parent->color;     //uncle is always the same color are temp's parent
+                        grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
+                    } else {       //if uncle is black
+                        if (temp->parent->left = temp) {
+                            rotateright(temp->parent);
+                        }
+                        temp->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
+                        grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
+                        rotateleft(grandparent);
+                    }
+                } else {          //if there is no grandparents
+                    temp->parent = root;
                 }
-                else if (value > temp->data){
-                    temp = temp->right;
-                }
             }
-            if(parent->data > value){
-                parent->left = newNode;
-            }
-            else if (parent->data < value){
-                parent->right = newNode;
-            }
-            newNode->parent = parent;
         }
+        root->color = BLACK;            //ROOT MUST ALWAYS BE BLACK
         _size++;//size counting
-        fixInsert(newNode);
     }
 
     void insert_recurse(Node *top, int value) {
@@ -198,108 +169,107 @@ namespace lab10{
             else insert_recurse(top->left, value);
         } else if (value == top->data) top->size++;
          */
-        if (top == nullptr)
-        {
+        if (top == nullptr) {
             Node *top = new Node(value);
             top->data = value;
             top->left = nullptr;
             top->right = nullptr;
-        }
-
-        else if (value < top->data)
-        {
+        } else if (value < top->data) {
             insert_recurse(top->left, value);
-        }
-
-        else if (value > top->data)
-        {
+        } else if (value > top->data) {
             insert_recurse(top->right, value);
         }
     }
 
-    Node* LL_rotation(Node * target){//auxiliary function
-        target->data=target->parent->data;
-        target->parent->data=target->parent->left->data;
-        if(target->left!=NULL)
+    Node *LL_rotation(Node *target) {//auxiliary function
+        target->data = target->parent->data;
+        target->parent->data = target->parent->left->data;
+        if (target->left != NULL)
             target->right = target->left;
-        target->left=target->parent->left->right;
-        if(target->left!=NULL)
-            target->left->parent=target;
-        target=target->parent->left;//delete target at the very end
-        target->parent->left=target->left;
-        target->left->parent=target->parent;
-        target->left->color=BLACK;
+        target->left = target->parent->left->right;
+        if (target->left != NULL)
+            target->left->parent = target;
+        target = target->parent->left;//delete target at the very end
+        target->parent->left = target->left;
+        target->left->parent = target->parent;
+        target->left->color = BLACK;
         return target;
     }
-    Node* LR_rotation(Node * target) {//auxiliary function
+
+    Node *LR_rotation(Node *target) {//auxiliary function
         //first rotation: to a ll case
-        Node* LR=target->parent->left->right;
-        target->parent->left->right=LR->left;
-        LR->left=target->parent->left;
-        LR->left->parent=LR;
-        target->parent->left=LR;
-        LR->parent=target->parent;
+        Node *LR = target->parent->left->right;
+        target->parent->left->right = LR->left;
+        LR->left = target->parent->left;
+        LR->left->parent = LR;
+        target->parent->left = LR;
+        LR->parent = target->parent;
 
         //Second rotation
         return LL_rotation(target);
     }
-    Node* RR_rotation(Node * target) {//auxiliary function
-        target->data=target->parent->data;
-        target->parent->data=target->parent->right->data;
-        if(target->right!=NULL)
+
+    Node *RR_rotation(Node *target) {//auxiliary function
+        target->data = target->parent->data;
+        target->parent->data = target->parent->right->data;
+        if (target->right != NULL)
             target->left = target->right;
-        target->right=target->parent->right->left;
-        if(target->right!=NULL)
-            target->right->parent=target;
-        target=target->parent->right;//delete target at the very end
-        target->parent->right=target->right;
-        target->right->parent=target->parent;
-        target->right->color=BLACK;
+        target->right = target->parent->right->left;
+        if (target->right != NULL)
+            target->right->parent = target;
+        target = target->parent->right;//delete target at the very end
+        target->parent->right = target->right;
+        target->right->parent = target->parent;
+        target->right->color = BLACK;
         return target;
     }
-    Node* RL_rotation(Node * target) {//auxiliary function
+
+    Node *RL_rotation(Node *target) {//auxiliary function
         //first rotation: to a rr case
-        Node* RL=target->parent->right->left;
-        target->parent->right->left=RL->right;
-        RL->right=target->parent->right;
-        RL->right->parent=RL;
-        target->parent->right=RL;
-        RL->parent=target->parent;
+        Node *RL = target->parent->right->left;
+        target->parent->right->left = RL->right;
+        RL->right = target->parent->right;
+        RL->right->parent = RL;
+        target->parent->right = RL;
+        RL->parent = target->parent;
 
         //Second rotation
         return RR_rotation(target);
     }
-    void _Bsibling_Bchildren(Node *double_black){//recursive auxiliary function
-        if(double_black->parent!=NULL){
-            if(!double_black->parent->color){//parent is black
+
+    void _Bsibling_Bchildren(Node *double_black) {//recursive auxiliary function
+        if (double_black->parent != NULL) {
+            if (!double_black->parent->color) {//parent is black
                 _Bsibling_Bchildren(double_black->parent);
-            }else{//parent is red
-                double_black->parent->color=BLACK;
+            } else {//parent is red
+                double_black->parent->color = BLACK;
             }
             //make sibling red
-            if(double_black->parent->left==double_black){//sibling at right
-                double_black->parent->right->color=RED;
-            }else if(double_black->parent->right==double_black){//sibling at left
-                double_black->parent->left->color=RED;
-            }else
+            if (double_black->parent->left == double_black) {//sibling at right
+                double_black->parent->right->color = RED;
+            } else if (double_black->parent->right == double_black) {//sibling at left
+                double_black->parent->left->color = RED;
+            } else
                 throw "Structure error: cant find child in parent pointer";
         }
     }
-    Node* redblacktree::find_key(int key){
-        Node* RT=root;
-        while(RT!=NULL){
-            if(key<RT->data){
-                RT=RT->left;
-            }else if(key>RT->data){
-                RT=RT->right;
+
+    Node *redblacktree::find_key(int key) {
+        Node *RT = root;
+        while (RT != NULL) {
+            if (key < RT->data) {
+                RT = RT->left;
+            } else if (key > RT->data) {
+                RT = RT->right;
             } else
                 return RT;
         }
         return NULL;
     }
-    void redblacktree::remove(int key){
-        Node* target=find_key(key);
-        if(target==NULL)
+
+    void redblacktree::remove(int key) {
+        Node *target = find_key(key);
+        if (target == NULL)
             throw "Key not found";
         if(target->right!=NULL&&target->left!=NULL){//two children
             Node* tmp=target->right;
@@ -354,89 +324,86 @@ namespace lab10{
                     if(target==target->parent->right){//sibling at left
                         if(target->left==NULL)
                             throw "Structure error: double black node don't have sibling";
-                        if(target->parent->left->color){//sibling is red: convert to case b or a
-                            target->parent->left->parent=target->parent->parent;
-                            if(target->parent->parent!=NULL){
-                                if(target->parent->parent->left==target->parent)
-                                    target->parent->parent->left=target->parent->left;
-                                else if(target->parent->parent->right==target->parent)
-                                    target->parent->parent->right=target->parent->left;
+                        if (target->parent->left->color) {//sibling is red: convert to case b or a
+                            target->parent->left->parent = target->parent->parent;
+                            if (target->parent->parent != NULL) {
+                                if (target->parent->parent->left == target->parent)
+                                    target->parent->parent->left = target->parent->left;
+                                else if (target->parent->parent->right == target->parent)
+                                    target->parent->parent->right = target->parent->left;
                                 else
                                     throw "Structure error: cant find child in parent pointer";
                             }
-                            target->parent->parent=target->parent->left;
-                            target->parent->left=target->parent->left->right;
-                            target->parent->left->parent=target->parent;
-                            target->parent->parent->right=target->parent;
+                            target->parent->parent = target->parent->left;
+                            target->parent->left = target->parent->left->right;
+                            target->parent->left->parent = target->parent;
+                            target->parent->parent->right = target->parent;
                         }
-                        if(!target->parent->left->color) {//sibling is black
-                            if(color_is(target->parent->left->left)){//ll case:do rotation
-                                target=LL_rotation(target);
-                            }else if(color_is(target->parent->left->right)){//lr case
-                                target=LR_rotation(target);
-                            }else{//black sibling at left and have both black children
+                        if (!target->parent->left->color) {//sibling is black
+                            if (color_is(target->parent->left->left)) {//ll case:do rotation
+                                target = LL_rotation(target);
+                            } else if (color_is(target->parent->left->right)) {//lr case
+                                target = LR_rotation(target);
+                            } else {//black sibling at left and have both black children
                                 _Bsibling_Bchildren(target);
-                                if(target->right!=NULL) {
+                                if (target->right != NULL) {
                                     target->parent->right = target->right;
-                                    target->right->parent=target->parent;
-                                }
-                                else if(target->left!=NULL) {
+                                    target->right->parent = target->parent;
+                                } else if (target->left != NULL) {
                                     target->parent->right = target->left;
-                                    target->left->parent=target->parent;
+                                    target->left->parent = target->parent;
                                 } else
-                                    target->parent->right=NULL;
+                                    target->parent->right = NULL;
                             }
-                        }else
+                        } else
                             throw "Unexpected red sibling";
                     }else if(target==target->parent->left){//sibling at right
                         if(target->parent->right==NULL)
                             throw "Structure error: double black node don't have sibling";
-                        if(target->parent->right->color){//sibling is red: convert to case b or a
-                            target->parent->right->parent=target->parent->parent;
-                            if(target->parent->parent!=NULL){
-                                if(target->parent->parent->left==target->parent)
-                                    target->parent->parent->left=target->parent->right;
-                                else if(target->parent->parent->right==target->parent)
-                                    target->parent->parent->right=target->parent->right;
+                        if (target->parent->right->color) {//sibling is red: convert to case b or a
+                            target->parent->right->parent = target->parent->parent;
+                            if (target->parent->parent != NULL) {
+                                if (target->parent->parent->left == target->parent)
+                                    target->parent->parent->left = target->parent->right;
+                                else if (target->parent->parent->right == target->parent)
+                                    target->parent->parent->right = target->parent->right;
                                 else
                                     throw "Structure error: cant find child in parent pointer";
                             }
-                            target->parent->parent=target->parent->right;
-                            target->parent->right=target->parent->right->left;
-                            target->parent->right->parent=target->parent;
-                            target->parent->parent->left=target->parent;
-                            target->parent->color=RED;
-                            target->parent->parent->color=BLACK
+                            target->parent->parent = target->parent->right;
+                            target->parent->right = target->parent->right->left;
+                            target->parent->right->parent = target->parent;
+                            target->parent->parent->left = target->parent;
+                            target->parent->color = RED;
+                            target->parent->parent->color = BLACK
                         }
                         if(!target->parent->right->color){//sibling is black
                             if(color_is(target->parent->right->right)){//rr case:do rotation
-                                target=RR_rotation(target);
+                                target = RR_rotation(target);
                             }else if(color_is(target->parent->right->left)){//rl case
-                                target=RL_rotation(target);
-                            }
-                            else{//black sibling at right and have both black children
+                                target = RL_rotation(target);
+                            } else {//black sibling at right and have both black children
                                 _Bsibling_Bchildren(target);
-                                if(target->right!=NULL) {
+                                if (target->right != NULL) {
                                     target->parent->left = target->right;
-                                    target->right->parent=target->parent;
-                                }
-                                else if(target->left!=NULL) {
+                                    target->right->parent = target->parent;
+                                } else if (target->left != NULL) {
                                     target->parent->left = target->left;
-                                    target->left->parent=target->parent;
+                                    target->left->parent = target->parent;
                                 } else
-                                    target->parent->left=NULL;
+                                    target->parent->left = NULL;
                             }
-                        }else
+                        } else
                             throw "Unexpected red sibling";
                     }else
                         throw "Structure error: cant find child in parent pointer";
-                }else{//target is root
-                    if(target->left!=NULL){
-                        root=target->left;
-                    }else if(target->right=NULL){
-                        root=target->right;
-                    }else
-                        root=NULL;
+                } else {//target is root
+                    if (target->left != NULL) {
+                        root = target->left;
+                    } else if (target->right = NULL) {
+                        root = target->right;
+                    } else
+                        root = NULL;
                 }
             }
         }
@@ -461,54 +428,42 @@ namespace lab10{
     }
 
     // used to print data in tree inOrder (least to greatest)
-    void redblacktree::inOrder()
-    {
+    void redblacktree::inOrder() {
         inOrder_traversal(root);
     }
 
     // used to indicate recoloring/rotating done in insert and remove
-    void redblacktree::levelOrder()
-    {
-
+    void redblacktree::levelOrder() {
+        levelOrderRecurse(root);
     }
-
-
     // AUXILIARY FUNCTION
     void inOrder_traversal(Node *top)
     {
         if (top == nullptr)
-        {
             return;
-        }
         inOrder_traversal(top->left);
-        std::cout << top->data << std::endl;
+        std::cout << top->data << " " << std::endl;
         inOrder_traversal(top->right);
     }
 
-    int height_of_tree(Node *top)
-    {
+    void levelOrderRecurse(Node *top) {
         if (top == nullptr)
-        {
-            return 0;
-        }
+            return;
+        std::queue<Node *> q;
+        q.push(top);
 
-        else
-        {
-            int left_height = height_of_tree(top->left);
-            int right_height = height_of_tree(top->right);
+        while (!q.empty()) {
+            Node *temp = q.front();
+            std::cout << temp->data << " " << std::endl;
+            q.pop();
 
-            if (left_height > right_height)
-            {
-                left_height = left_height+1;
-                return left_height;
-            }
+            if (temp->left != nullptr)
+                q.push(temp->left);
 
-            if (left_height < right_height)
-            {
-                right_height = right_height+1;
-                return right_height;
-            }
+            if (temp->right != nullptr)
+                q.push(temp->right);
         }
     }
+
 
 }

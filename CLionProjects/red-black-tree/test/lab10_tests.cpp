@@ -1,30 +1,6 @@
 #include "gtest/gtest.h"
 #include "red_black_tree.h"
-#include <iostream>
 
-/*
-class Lab08SortsFixture : public ::testing::Test {
-protected:
-    virtual void SetUp() {
-        //test_numbers=std::vector<unsigned>({12,8,14,15,18,16,17,19,22,20,4,10,9,13,11,5,7,6,2,1,3});
-    }
-
-public:
-    //lab6::doubly_linked_list *to_sort_short, *to_sort_long;
-    //std::vector <unsigned> test_numbers;
-};
-
-
-class Lab08SortsProfiler : public ::testing::Test {
-protected:
-    virtual void SetUp(){
-
-    }
-public:
-    lab6::doubly_linked_list *list_16, *list_32, *list_64, *list_128, *list_256, *list_512, *list_1024, *list_2048, *list_4096, *list_8192, *list_16384, *list_32768;
-};
-
- */
 
 TEST(red_black_tree, constructorTest)
 {
@@ -46,8 +22,7 @@ TEST(red_black_tree, insertTest)
     //EXPECT_EQ("20 10 30 1 15", tree1.levelOrder()); // indicates rbt
 }
 
-TEST(red_black_tree, removeTest)
-{
+TEST(red_black_tree, removeTest) {
     lab10::redblacktree tree2;
     tree2.insert(10);
     tree2.insert(20);
