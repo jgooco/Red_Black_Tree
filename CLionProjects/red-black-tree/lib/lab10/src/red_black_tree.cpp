@@ -55,7 +55,7 @@ namespace lab10{
                 b->right->parent = a;       //b->right's new parent is now a
             }
             else if (b->right == nullptr){      //nothing to move
-                a->left = nullptr;          //dont think I need... (maybe just do nothing)
+                a->left = nullptr;          //don't think I need... (maybe just do nothing)
             }
             if(a->parent != nullptr){       //if the parent of a exists, we need to change it to be b's parent instead
                 if(a == a->parent->right) {      //if a was to the left of that parent
@@ -86,12 +86,48 @@ namespace lab10{
 
     void redblacktree::insert(int value)//inserts a node into red black tree
     {
-        if (root == nullptr) {
-            root = new Node(value);
-        } else {
-            insert_recurse(root, value);
-        }
+        Node *temp = new Node(value);       //temp is the node we are inserting with the value in it
+        temp->color = RED;                  //always inserting new node as red
 
+        if (root == nullptr)        //tree is empty
+        {
+            root = temp;            //so the new node we are inserting will be the root
+        }
+        else                        //if tree is not empty
+        {
+            insert_recurse(root, value);        //recursion to insert node at appropriate place
+            Node *grandparent = temp->parent->parent;       //set grandparent node of temp
+
+            if(temp->parent != nullptr && temp->parent->color == 'RED')     //only go through this if-statement if parent of temp is red
+            {
+                Node *uncle;                            //set uncle node to temp
+                if(grandparent->left == temp->parent)   //if temp's parent is to the left of temp's grandparent
+                {
+                    uncle = grandparent->right;         //uncle has to be to the right of the grandparent
+                    if(uncle != nullptr)                //if uncle exists
+                    {
+                        grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
+                        temp->parent = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
+                        uncle->color = temp->parent->color;     //uncle is always the same color are temp's parent
+                    }
+                }
+                else if(grandparent->right == temp->parent)     //if temp's parent was to the right of grandparent instead
+                {
+                    uncle = grandparent->left;      //uncle has to be the other side of parent, meaning left of grandparent in this case
+                    if(uncle != nullptr)            //if uncle exists
+                    {
+                        grandparent->color = RED;       //grandparent is same color as temp b/c colors in tree is suppose to alternate
+                        temp->parent = BLACK;           //cannot have two adjacent red nodes, and temp is red, so parent needs to change to black
+                        uncle->color = temp->parent->color;     //uncle is same color as parent
+                    }
+                }
+                else            //if there is no grandparent
+                {
+                    temp->parent = root;            //parent is root if there is no parent to the parent
+                }
+            }
+        }
+        root->color = BLACK;            //ROOT MUST ALWAYS BE BLACK
     }
 
     void insert_recurse(Node *top, int value) {
