@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "red_black_tree.h"
-#include <iostream>
+
 class Lab08SortsFixture : public ::testing::Test {
 protected:
     virtual void SetUp() {
@@ -43,8 +43,7 @@ TEST(red_black_tree, insertTest)
     //EXPECT_EQ("1 10 15 20 30", tree1.print());
 }
 
-TEST(red_black_tree, removeTest)
-{
+TEST(red_black_tree, removeTest) {
     lab10::redblacktree tree2;
     tree2.insert(10);
     tree2.insert(20);

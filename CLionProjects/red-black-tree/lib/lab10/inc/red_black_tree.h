@@ -19,6 +19,7 @@ namespace lab10 {
         Node *root;
     protected:
         void rotateleft(Node *&, Node *&);
+
         void rotateright(Node *&, Node *&);
         void fixviolations(Node *&, Node *&);
 
