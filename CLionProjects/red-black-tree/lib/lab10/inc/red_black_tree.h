@@ -26,7 +26,8 @@ namespace lab10 {
         redblacktree();
         bool color_is(Node* src);
         void insert(int value);
-        void remove(Node* target);
+        Node* find_key(int key);
+        void remove(int key);
         void inOrder();
         void levelOrder();
         int size();

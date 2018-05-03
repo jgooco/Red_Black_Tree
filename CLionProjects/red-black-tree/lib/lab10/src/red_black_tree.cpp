@@ -241,7 +241,22 @@ namespace lab10{
                 throw "Structure error: cant find child in parent pointer";
         }
     }
-    void redblacktree::remove(Node* target){
+    Node* redblacktree::find_key(int key){
+        Node* RT=root;
+        while(RT!=NULL){
+            if(key<RT->data){
+                RT=RT->left;
+            }else if(key>RT->data){
+                RT=RT->right;
+            } else
+                return RT;
+        }
+        return NULL;
+    }
+    void redblacktree::remove(int key){
+        Node* target=find_key(key);
+        if(target==NULL)
+            throw "Key not found";
         if(target->right!=NULL&&target->left!=NULL){//two children
             Node* tmp=target->right;
             while(tmp->left!=NULL){
