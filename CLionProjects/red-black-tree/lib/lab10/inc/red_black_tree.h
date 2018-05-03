@@ -28,6 +28,8 @@ namespace lab10 {
         redblacktree();
         bool color_is(Node* src);
         void insert(int value);
+        void color_to_black(Node *newNode);
+        void color_to_red(Node *newNode);
         Node* find_key(int key);
         void remove(int key);
         void inOrder();

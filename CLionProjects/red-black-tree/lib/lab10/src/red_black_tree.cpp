@@ -55,7 +55,7 @@ namespace lab10{
                 b = root;                   //therefore after rotating left, b will be the new root
             }
             a->parent = b;         //after rotating, set a's new parent to be b
-            b->left = a;           //and b's left is now a
+            a = b->left;           //and b's left is now a
         }
     }
 
@@ -89,13 +89,14 @@ namespace lab10{
                 b = root;               // after rotating right, b is now the new root
             }
             a->parent = b;              //a's new parent is now b since a rotated right
-            b->right = a;               //b's right is now a
+            a = b->right;               //b's right is now a
         }
 
     }
 
     void redblacktree::fixInsert(Node *&newNode) // fixes any violation from insert
     {
+        color_to_red(newNode);                  //always inserting new node as red
         while(newNode != root && color_is(newNode->parent))     //only go through this if-statement if parent of temp is red
         {
             Node *grandparent = newNode->parent->parent;       //set grandparent node of temp
@@ -104,16 +105,16 @@ namespace lab10{
             {
                 uncle = grandparent->right;         //uncle has to be to the right of the grandparent
                 if(color_is(uncle)){
-                    newNode->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
+                    color_to_black(newNode->parent);           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
                     uncle->color = newNode->parent->color;     //uncle is always the same color are temp's parent
-                    grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
+                    color_to_red(grandparent);       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
                 }
                 else{       //if uncle is black
-                    if(newNode->parent->right = newNode){
+                    if(newNode == newNode->parent->right){
                         rotateleft(newNode->parent);
                     }
-                    newNode->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
-                    grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
+                    color_to_black(newNode->parent);           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
+                    color_to_red(grandparent);       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
                     rotateright(grandparent);
                 }
             }
@@ -121,16 +122,16 @@ namespace lab10{
             {
                 uncle = grandparent->left;      //uncle has to be the other side of parent, meaning left of grandparent in this case
                 if(color_is(uncle)){
-                    newNode->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
+                    color_to_black(newNode->parent);           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
                     uncle->color = newNode->parent->color;     //uncle is always the same color are temp's parent
-                    grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
+                    color_to_red(grandparent);       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
                 }
                 else{       //if uncle is black
-                    if(newNode->parent->left = newNode){
+                    if(newNode == newNode->parent->left){
                         rotateright(newNode->parent);
                     }
-                    newNode->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
-                    grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
+                    color_to_black(newNode->parent);           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
+                    color_is(grandparent);       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
                     rotateleft(grandparent);
                 }
             }
@@ -138,7 +139,14 @@ namespace lab10{
                 newNode->parent = root;
             }
         }
-        root->color = BLACK;            //ROOT MUST ALWAYS BE BLACK
+        color_to_black(root);            //ROOT MUST ALWAYS BE BLACK
+    }
+
+    void redblacktree::color_to_black(Node *newNode){
+        newNode->color = BLACK;
+    }
+    void redblacktree::color_to_red(Node *newNode){
+        newNode->color = RED;
     }
 
     int redblacktree::size() {
@@ -151,7 +159,6 @@ namespace lab10{
         Node *newNode = new Node(value);
         newNode->left = nullptr;
         newNode->right= nullptr;
-        newNode->color = RED;                  //always inserting new node as red
 
         if (root == nullptr)        //tree is empty so we make the root to be the temp value
         {
