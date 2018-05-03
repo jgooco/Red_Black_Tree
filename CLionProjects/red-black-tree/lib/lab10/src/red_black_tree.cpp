@@ -41,8 +41,14 @@ namespace lab10{
             else if (b->left == nullptr){      //if there is no node left of b
                 a->right = nullptr;            //then right of a will be empty
             }
-            if(a->parent != nullptr){      //if a parent of a exists
-                b->parent = a->parent;     //b will be the new child to that parent
+            if(a->parent != nullptr){           //if a parent of a exists
+                if(a == a->parent->right) {      //if a was to the left of that parent
+                    a->parent->right = b;       //b will be to the right of that parent
+                }
+                else{       //not to the right of that parent, so must be left
+                    a->parent->left = b;        //left of that parent will now be b
+                }
+                b->parent = a->parent;          //and the new parent to b will be a's parent
             }
             if(a->parent == nullptr){      //is a does not have a parent, then that means a is the root
                 b = root;                   //therefore after rotating left, b will be the new root
@@ -68,7 +74,13 @@ namespace lab10{
                 a->left = nullptr;          //dont think I need... (maybe just do nothing)
             }
             if(a->parent != nullptr){       //if the parent of a exists, we need to change it to be b's parent instead
-                b->parent = a->parent;      //b's parent is now a's parent
+                if(a == a->parent->right) {      //if a was to the left of that parent
+                    a->parent->right = b;       //b will be to the right of that parent
+                }
+                else{       //not to the right of that parent, so must be left
+                    a->parent->left = b;        //left of that parent will now be b
+                }
+                b->parent = a->parent;          //and the new parent to b will be a's parent
             }
             if(a->parent == nullptr){       //if a had no parent then that meant a was root
                 //why is root not working?
