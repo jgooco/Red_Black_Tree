@@ -107,6 +107,7 @@ namespace lab10{
     {
         Node *temp = new Node(value);       //temp is the node we are inserting with the value in it
         temp->color = RED;                  //always inserting new node as red
+        insert_recurse(root, value);
 
         if (root == nullptr)        //tree is empty
         {
@@ -114,7 +115,6 @@ namespace lab10{
         }
         else                        //if tree is not empty
         {
-            insert_recurse(root, value);        //recursion to insert node at appropriate place
             Node *grandparent = temp->parent->parent;       //set grandparent node of temp
 
             if(temp->parent != nullptr && temp->parent->color == 'RED')     //only go through this if-statement if parent of temp is red
