@@ -5,7 +5,7 @@
 namespace lab10{
 
     // AUXILIARY FUNCTION
-    void inOrder_traversal(Node *top);// recurse function that will level order tranversal;
+    void inOrder_traversal(Node *top);// recurse function that will level order traversal;
 
     void insert_recurse(Node *top, int value);
 
