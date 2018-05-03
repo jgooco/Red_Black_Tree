@@ -105,7 +105,8 @@ namespace lab10{
 
     void redblacktree::insert(int value)//inserts a node into red black tree
     {
-        Node *temp = new Node(value);       //temp is the node we are inserting with the value in it
+        Node *temp;       //temp is the node we are inserting with the value in it
+        temp->data = value;
         temp->color = RED;                  //always inserting new node as red
         insert_recurse(root, value);
 
@@ -115,15 +116,14 @@ namespace lab10{
         }
         else                        //if tree is not empty
         {
-            Node *grandparent = temp->parent->parent;       //set grandparent node of temp
-
-            if(temp->parent != nullptr && temp->parent->color == 'RED')     //only go through this if-statement if parent of temp is red
+            while(temp != root && color_is(temp->parent))     //only go through this if-statement if parent of temp is red
             {
+                Node *grandparent = temp->parent->parent;       //set grandparent node of temp
                 Node *uncle;                            //set uncle node to temp
                 if(grandparent->left == temp->parent)   //if temp's parent is to the left of temp's grandparent
                 {
                     uncle = grandparent->right;         //uncle has to be to the right of the grandparent
-                    if(uncle->color == 'RED'){
+                    if(color_is(uncle)){
                         temp->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
                         uncle->color = temp->parent->color;     //uncle is always the same color are temp's parent
                         grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
@@ -140,7 +140,7 @@ namespace lab10{
                 else if(grandparent->right == temp->parent)     //if temp's parent was to the right of grandparent instead
                 {
                     uncle = grandparent->left;      //uncle has to be the other side of parent, meaning left of grandparent in this case
-                    if(uncle->color == 'RED'){
+                    if(color_is(uncle)){
                         temp->parent->color = BLACK;           //set the parent of temp to black since there cannot be two adjacent red node (b/c temp is red)
                         uncle->color = temp->parent->color;     //uncle is always the same color are temp's parent
                         grandparent->color = RED;       //grandparent is red b/c temp is red and in RB-tree, the red and black alternate. Meaning grandparent and grandchild are always the same color
@@ -154,9 +154,8 @@ namespace lab10{
                         rotateleft(grandparent);
                     }
                 }
-                else            //if there is no grandparent
-                {
-                    temp->parent = root;            //parent is root if there is no parent to the parent
+                else {          //if there is no grandparents
+                    temp->parent = root;
                 }
             }
         }
