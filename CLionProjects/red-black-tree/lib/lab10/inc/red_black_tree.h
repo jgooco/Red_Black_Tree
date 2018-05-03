@@ -8,7 +8,7 @@ namespace lab10 {
         int data;
         bool  color;
         Node *left, *right, *parent;
-        int size = 0;
+        int  size=0;
 
         Node(int data){
             this->data =data;
@@ -18,24 +18,21 @@ namespace lab10 {
 
     class redblacktree{
         Node *root;
-        int _size;
+        int  _size;
     protected:
         void rotateleft(Node *&);
-
         void rotateright(Node *&);
-        void fixviolations(Node *&, Node *&);
+        void fixInsert(Node *&);
 
     public:
         redblacktree();
         bool color_is(Node* src);
         void insert(int value);
-
-        Node *find_key(int key);
-
+        void color_to_black(Node *newNode);
+        void color_to_red(Node *newNode);
+        Node* find_key(int key);
         void remove(int key);
-
         void inOrder();
-
         void levelOrder();
         int size();
     };
