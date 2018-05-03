@@ -157,22 +157,6 @@ namespace lab10{
         } else if (value == top->data) top->size++;
     }
 
-    void _Bsibling_Bchildren(Node *double_black){//recursive auxiliary function
-        if(double_black->parent!=NULL){
-            if(!double_black->parent->color){//parent is black
-                _Bsibling_Bchildren(double_black->parent);
-            }else{//parent is red
-                double_black->parent->color=BLACK;
-            }
-            //make sibling red
-            if(double_black->parent->left==double_black){//sibling at right
-                double_black->parent->right->color=RED;
-            }else if(double_black->parent->right==double_black){//sibling at left
-                double_black->parent->left->color=RED;
-            }else
-                throw "Structure error: cant find child in parent pointer";
-        }
-    }
     Node* LL_rotation(Node * target){//auxiliary function
         target->data=target->parent->data;
         target->parent->data=target->parent->left->data;
@@ -224,6 +208,22 @@ namespace lab10{
 
         //Second rotation
         return RR_rotation(target);
+    }
+    void _Bsibling_Bchildren(Node *double_black){//recursive auxiliary function
+        if(double_black->parent!=NULL){
+            if(!double_black->parent->color){//parent is black
+                _Bsibling_Bchildren(double_black->parent);
+            }else{//parent is red
+                double_black->parent->color=BLACK;
+            }
+            //make sibling red
+            if(double_black->parent->left==double_black){//sibling at right
+                double_black->parent->right->color=RED;
+            }else if(double_black->parent->right==double_black){//sibling at left
+                double_black->parent->left->color=RED;
+            }else
+                throw "Structure error: cant find child in parent pointer";
+        }
     }
     void redblacktree::remove(Node* target){
         if(target->right!=NULL&&target->left!=NULL){//two children
@@ -279,7 +279,22 @@ namespace lab10{
                     if(target==target->parent->right){//sibling at left
                         if(target->left==NULL)
                             throw "Structure error: double black node don't have sibling";
-                        if(!target->left->color) {//sibling is black
+                        if(target->parent->left->color){//sibling is red: convert to case b or a
+                            target->parent->left->parent=target->parent->parent;
+                            if(target->parent->parent!=NULL){
+                                if(target->parent->parent->left==target->parent)
+                                    target->parent->parent->left=target->parent->left;
+                                else if(target->parent->parent->right==target->parent)
+                                    target->parent->parent->right=target->parent->left;
+                                else
+                                    throw "Structure error: cant find child in parent pointer";
+                            }
+                            target->parent->parent=target->parent->left;
+                            target->parent->left=target->parent->left->right;
+                            target->parent->left->parent=target->parent;
+                            target->parent->parent->right=target->parent;
+                        }
+                        if(!target->parent->left->color) {//sibling is black
                             if(color_is(target->parent->left->left)){//ll case:do rotation
                                 target=LL_rotation(target);
                             }else if(color_is(target->parent->left->right)){//lr case
@@ -296,10 +311,28 @@ namespace lab10{
                                 } else
                                     target->parent->right=NULL;
                             }
-                        }
+                        }else
+                            throw "Unexpected red sibling";
                     }else if(target==target->parent->left){//sibling at right
                         if(target->parent->right==NULL)
                             throw "Structure error: double black node don't have sibling";
+                        if(target->parent->right->color){//sibling is red: convert to case b or a
+                            target->parent->right->parent=target->parent->parent;
+                            if(target->parent->parent!=NULL){
+                                if(target->parent->parent->left==target->parent)
+                                    target->parent->parent->left=target->parent->right;
+                                else if(target->parent->parent->right==target->parent)
+                                    target->parent->parent->right=target->parent->right;
+                                else
+                                    throw "Structure error: cant find child in parent pointer";
+                            }
+                            target->parent->parent=target->parent->right;
+                            target->parent->right=target->parent->right->left;
+                            target->parent->right->parent=target->parent;
+                            target->parent->parent->left=target->parent;
+                            target->parent->color=RED;
+                            target->parent->parent=BLACK
+                        }
                         if(!target->parent->right->color){//sibling is black
                             if(color_is(target->parent->right->right)){//rr case:do rotation
                                 target=RR_rotation(target);
@@ -318,13 +351,21 @@ namespace lab10{
                                 } else
                                     target->parent->left=NULL;
                             }
-                        }
+                        }else
+                            throw "Unexpected red sibling";
                     }else
                         throw "Structure error: cant find child in parent pointer";
+                }else{//target is root
+                    if(target->left!=NULL){
+                        root=target->left;
+                    }else if(target->right=NULL){
+                        root=target->right;
+                    }else
+                        root=NULL;
                 }
             }
         }
-
+        delete target;
     }
 
     // default constructor
