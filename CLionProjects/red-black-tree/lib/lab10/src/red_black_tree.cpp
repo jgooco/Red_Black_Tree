@@ -165,6 +165,7 @@ namespace lab10{
     }
 
     void insert_recurse(Node *top, int value) {
+        /*
         if (value > top->data) {
             if (top->right == nullptr) top->right = new Node(value);
             else insert_recurse(top->right, value);
@@ -172,6 +173,24 @@ namespace lab10{
             if (top->left == nullptr) top->left = new Node(value);
             else insert_recurse(top->left, value);
         } else if (value == top->data) top->size++;
+         */
+        if (top == nullptr)
+        {
+            Node *top = new Node(value);
+            top->data = value;
+            top->left = nullptr;
+            top->right = nullptr;
+        }
+
+        else if (value < top->data)
+        {
+            insert_recurse(top->left, value);
+        }
+
+        else if (value > top->data)
+        {
+            insert_recurse(top->right, value);
+        }
     }
 
     Node* LL_rotation(Node * target){//auxiliary function
